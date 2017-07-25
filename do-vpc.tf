@@ -12,11 +12,6 @@ resource "digitalocean_firewall" "backend" {
     inbound_rule = [
         {
             protocol           = "tcp"
-            port_range         = "22"
-            source_addresses   = ["${digitalocean_droplet.bastion.*.ipv4_address_private}"]
-        },
-        {
-            protocol           = "tcp"
             port_range         = "1-65535"
             source_addresses   = ["${digitalocean_droplet.backend.*.ipv4_address_private}", "${digitalocean_droplet.bastion.*.ipv4_address_private}"]
         },
@@ -34,7 +29,7 @@ resource "digitalocean_firewall" "backend" {
         {
             protocol                = "tcp"
             port_range              = "1-65535"
-            destination_addresses   = ["0.0.0.0/0", "::/0"]
+            destination_addresses   = ["${digitalocean_droplet.backend.*.ipv4_address_private}", "${digitalocean_droplet.bastion.*.ipv4_address_private}"]
         },
         {
             protocol = "tcp"
@@ -85,10 +80,6 @@ resource "digitalocean_firewall" "bastion" {
         },
         {
             protocol           = "icmp"
-            source_addresses   = ["${digitalocean_droplet.backend.*.ipv4_address_private}", "${digitalocean_droplet.bastion.*.ipv4_address_private}"]
-        },
-        {
-            protocol           = "icmp"
             source_addresses   = ["0.0.0.0/0","::/0"]
         },
     ]
@@ -122,10 +113,6 @@ resource "digitalocean_firewall" "bastion" {
             protocol = "udp"
             port_range = "53"
             destination_addresses = ["0.0.0.0/0", "::/0"]
-        },
-        {
-            protocol                = "icmp"
-            destination_addresses   = ["${digitalocean_droplet.backend.*.ipv4_address_private}", "${digitalocean_droplet.bastion.*.ipv4_address_private}"]
         },
         {
             protocol           = "icmp"
