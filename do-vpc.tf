@@ -13,7 +13,7 @@ resource "digitalocean_firewall" "backend" {
         {
             protocol           = "tcp"
             port_range         = "22"
-            source_tags        = [${digitalocean_tag.bastion.id}]
+            source_addresses   = ["${digitalocean_droplet.bastion.*.ipv4_address_private}"]
         },
         {
             protocol           = "tcp"
