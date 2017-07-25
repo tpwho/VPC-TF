@@ -17,7 +17,7 @@ Edit the `terraform.tfvars` file:
 
 ```
 do_token = "digital ocean api key"
-ssh_key = "path to private ssh key"
+ssh_key = "path to public ssh key"
 ```
 
 Initialize terraform to download the provider plugin needed
